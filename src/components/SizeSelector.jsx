@@ -2,7 +2,7 @@ const SizeSelector = ({ sizes, selectedSize, onSelect }) => {
   return (
     <>
       <h3 className="text-[#141414] text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">
-        Size
+        Sizee
       </h3>
       <div className="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
         <label className="flex flex-col min-w-40 flex-1">
