@@ -32,7 +32,7 @@ function Products() {
 
   return (
     <div
-      className="relative flex size-full min-h-screen flex-col bg-[#96A78D] group/design-root overflow-x-hidden"
+      className="relative flex size-full min-h-screen flex-col bg-[#1E201E] group/design-root overflow-x-hidden"
       style={{ fontFamily: '"Noto Serif", "Noto Sans", sans-serif' }}
     >
       <div className="layout-container flex h-full grow flex-col">
@@ -47,7 +47,7 @@ function Products() {
           <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
             {/* Mobile Categories Header with Filters Button */}
             <div className="flex items-center justify-between md:hidden mb-4">
-              <h2 className="text-lg font-semibold">Products</h2>
+              <h2 className="text-lg font-semibold text-white">Products</h2>
               <button
                 className="bg-black text-white px-3 py-1 rounded-md text-sm"
                 onClick={() => setMobileFiltersOpen(true)}

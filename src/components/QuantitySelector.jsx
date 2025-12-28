@@ -20,16 +20,16 @@ const QuantitySelector = ({ quantity, setQuantity }) => {
 
   return (
     <>
-      <h3 className="text-[#141414] text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">
+      <h3 className="text-white text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">
         Quantity
       </h3>
       <div className="flex items-center gap- bg-[
 #fefaf9] px-4 min-h-14 justify-between rounded-xl"> {/* Added rounded-xl here */}
-        <p className="text-[#141414] text-base font-normal leading-normal flex-1 truncate">
+        <p className="text-white text-base font-normal leading-normal flex-1 truncate">
           Quantity:
         </p>
         <div className="shrink-0">
-          <div className="flex items-center gap-2 text-[#141414]">
+          <div className="flex items-center gap-2 text-white">
             <button
               onClick={handleDecrement}
               className="text-base font-medium leading-normal flex h-7 w-7 items-center justify-center rounded-full bg-[#fefaf9] cursor-pointer"

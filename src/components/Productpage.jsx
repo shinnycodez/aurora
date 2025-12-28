@@ -204,7 +204,7 @@ const ProductPage = ({ onOpenCart }) => {
   };
 
   if (!product) return (
-    <div className="min-h-screen bg-[#96A78D] flex items-center justify-center">
+    <div className="min-h-screen bg-[#1E201E] flex items-center justify-center">
       <div className="text-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto mb-4"></div>
         <p className="text-gray-600">Loading product...</p>
@@ -220,7 +220,7 @@ const ProductPage = ({ onOpenCart }) => {
   const savings = product.price - discountedPrice;
 
   return (
-    <div className="relative flex min-h-screen flex-col bg-[#96A78D] overflow-x-hidden">
+    <div className="relative flex min-h-screen flex-col bg-[#1E201E] overflow-x-hidden">
       {showSuccess && (
         <div className="fixed top-5 left-1/2 transform -translate-x-1/2 z-[100]">
           <div className="flex items-center gap-3 bg-green-100 border border-green-300 text-green-800 px-5 py-2 rounded-xl shadow-lg animate-fade-in-out transition-all">
@@ -239,7 +239,7 @@ const ProductPage = ({ onOpenCart }) => {
       )}
 
       <Header />
-      <div className="layout-container flex h-full grow flex-col bg-[#96A78D]">
+      <div className="layout-container flex h-full grow flex-col bg-[#1E201E]">
         <div className="gap-1 px-6 flex flex-1 justify-center py-5 flex-col md:flex-row">
           <div className="flex flex-col max-w-[920px] flex-1">
             <div className="flex w-full grow p-4 relative">
@@ -263,7 +263,7 @@ const ProductPage = ({ onOpenCart }) => {
           <div className="flex flex-col w-full md:w-[360px]">
             {/* Product Info with Discount Pricing */}
             <div className="px-4 py-3">
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">{product.title}</h1>
+              <h1 className="text-2xl font-bold text-white mb-2">{product.title}</h1>
               
               {/* Price Display with Discount */}
               <div className="mb-4">
@@ -273,7 +273,7 @@ const ProductPage = ({ onOpenCart }) => {
                       <span className="text-2xl font-bold text-green-600">
                         PKR {discountedPrice.toLocaleString()}
                       </span>
-                      <span className="text-lg text-gray-500 line-through">
+                      <span className="text-lg text-white line-through">
                         PKR {product.price.toLocaleString()}
                       </span>
                     </div>
@@ -292,16 +292,16 @@ const ProductPage = ({ onOpenCart }) => {
                     )}
                   </div>
                 ) : (
-                  <span className="text-2xl font-bold text-gray-900">
+                  <span className="text-2xl font-bold text-white">
                     PKR {product.price.toLocaleString()}
                   </span>
                 )}
               </div>
 
-              <p className="text-gray-600 mb-4">{product.description}</p>
+              <p className="text-white mb-4">{product.description}</p>
               
               {product.packageInfo && (
-                <p className="text-sm text-gray-500 mb-3">Package: {product.packageInfo}</p>
+                <p className="text-sm text-white mb-3">Package: {product.packageInfo}</p>
               )}
             </div>
             
@@ -314,7 +314,7 @@ const ProductPage = ({ onOpenCart }) => {
             {/* Color Variations Selector */}
             {product.variations && product.variations.length > 0 && (
               <div className="px-4 py-3">
-                <h3 className="text-sm font-medium text-gray-900 mb-2">Color:</h3>
+                <h3 className="text-sm font-medium text-white mb-2">Color:</h3>
                 <div className="flex flex-wrap gap-2">
                   {product.variations.map((variation) => (
                     <button
@@ -337,7 +337,7 @@ const ProductPage = ({ onOpenCart }) => {
             {/* Size Variations Selector */}
             {product.sizes && product.sizes.length > 0 && (
               <div className="px-4 py-3">
-                <h3 className="text-sm font-medium text-gray-900 mb-2">Size:</h3>
+                <h3 className="text-sm font-medium text-white mb-2">Size:</h3>
                 <div className="flex flex-wrap gap-2">
                   {product.sizes.map((size) => (
                     <button
@@ -377,7 +377,7 @@ const ProductPage = ({ onOpenCart }) => {
                 disabled={!product.available || loading}
                 className={`w-full border-2 py-3 px-4 rounded-xl font-medium text-base transition-colors ${
                   product.available && !loading
-                    ? 'border-black text-black hover:bg-gray-100'
+                    ? 'border-white text-white '
                     : 'border-gray-400 text-gray-400 cursor-not-allowed'
                 }`}
               >
@@ -401,7 +401,7 @@ const ProductPage = ({ onOpenCart }) => {
                 disabled={!product.available || loading}
                 className={`w-full py-3 px-4 rounded-xl font-medium text-base transition-colors ${
                   product.available && !loading
-                    ? 'bg-[#B6CEB4] text-white hover:bg-[#FCBACB]'
+                    ? 'bg-[#393E46] text-white hover:bg-[#FCBACB]'
                     : 'bg-gray-400 text-white cursor-not-allowed'
                 }`}
               >

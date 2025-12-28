@@ -213,7 +213,7 @@ const shippingCost = 300
     return (
       <>
         <Header />
-        <div className="min-h-screen bg-[#96A78D] py-8 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-[#1E201E] py-8 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             <div className="text-center py-16">
               <h1 className="text-3xl font-bold text-gray-900 mb-4">Your Cart is Empty</h1>
@@ -234,7 +234,7 @@ const shippingCost = 300
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-[#96A78D] py-8 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-[#1E201E] py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Breadcrumbs */}
           <nav className="flex mb-8" aria-label="Breadcrumb">
@@ -246,12 +246,12 @@ const shippingCost = 300
                 <span className="text-gray-400">/</span>
               </li>
               <li>
-                <span className="text-black font-medium">Checkout</span>
+                <span className="text-white font-medium">Checkout</span>
               </li>
             </ol>
           </nav>
 
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">Checkout</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-8">Checkout</h1>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Left: Form */}

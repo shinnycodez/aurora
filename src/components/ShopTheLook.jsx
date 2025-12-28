@@ -29,14 +29,14 @@ function ShopTheLook() {
 
   return (
     <div className="mb-8">
-      <h2 className="text-[#141414] text-2xl md:text-3xl font-bold leading-tight tracking-[-0.015em] px-4 pb-4 pt-6">
-       top sellers ⋆｡𖦹°⭒˚｡⋆
+      <h2 className="text-white text-2xl md:text-3xl font-bold leading-tight tracking-[-0.015em] px-4 pb-4 pt-6">
+       Best sellers ⋆｡𖦹°⭒˚｡⋆
       </h2>
 
       {loading ? (
-        <p className="px-4 text-gray-500">Loading...</p>
+        <p className="px-4 text-white">Loading...</p>
       ) : topProducts.length === 0 ? (
-        <p className="px-4 text-gray-500">No top products found.</p>
+        <p className="px-4 text-white">No top products found.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
           {topProducts.map(product => (

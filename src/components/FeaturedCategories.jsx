@@ -5,13 +5,13 @@ const categories = [
     {
     id: 1,
     title: "Bracelets ⋆౨ৎ˚⟡",
-    imageUrl: "https://pbs.twimg.com/media/G1TNITFXIAAKjyZ?format=jpg&name=small",
+    imageUrl: "https://i.pinimg.com/736x/25/ff/a7/25ffa7864224cba237d72c528f176442.jpg",
     link: "Bracelets"
   },
   {
     id: 2,
     title: "Necklaces ✧˖°.",
-    imageUrl: "https://pbs.twimg.com/media/G1TNOG8WQAAwQO3?format=jpg&name=small",
+    imageUrl: "https://i.pinimg.com/736x/f5/2b/9d/f52b9d2ca78acffa6657a3638dbb6777.jpg",
       link: "Necklaces",
   },
 
@@ -24,37 +24,37 @@ const categories = [
       {
     id: 3,
     title: "Earrings ⋆˚꩜｡",
-    imageUrl: "https://pbs.twimg.com/media/G1TNUbcXwAAcikk?format=jpg&name=small",
+    imageUrl: "https://i.pinimg.com/736x/8d/1c/25/8d1c257884b9bdd7001857d3dbcda6df.jpg",
       link: "Earrings"
   },
       {
     id: 4,
-    title: "Phone charms ｡°✩",
-    imageUrl:"https://pbs.twimg.com/media/G1TNROYWUAAX94f?format=jpg&name=small",
-     link: "Phone charms"
+    title: "Pearl collection ｡°✩",
+    imageUrl:"https://i.pinimg.com/736x/7e/3d/65/7e3d65af38004e83f2222a07e5b0cf13.jpg",
+     link: "Pearl collection"
   },
         {
     id: 5,
-    title: "Presson nails 𝜗ৎ",
-    imageUrl:"https://pbs.twimg.com/media/G1TOH2OWwAAoY6v?format=jpg&name=small",
-     link: "Presson nails"
+    title: "Pendants 𝜗ৎ",
+    imageUrl:"https://i.pinimg.com/736x/ce/d6/15/ced615a04ecd507ca7b084d3738e249b.jpg",
+     link: "Pendants"
   },
   {
       id: 6,
-    title: "Other ⋆˚࿔",
-    imageUrl:"https://pbs.twimg.com/media/G1TOJfCWwAEafV7?format=jpg&name=small",
-     link: "Other"
+    title: "tasbeeh ⋆˚࿔",
+    imageUrl:"https://i.pinimg.com/736x/2c/b7/a2/2cb7a2eafdd6804914c55e27802c2f2f.jpg",
+     link: "tasbeeh"
   },
-    {
-      id: 7,
-    title: "Cuffs ✮ ⋆ ˚｡",
-    imageUrl:"https://pbs.twimg.com/media/G1TOKwYWEAAnoBZ?format=jpg&name=small",
-     link: "Cuffs"
-  },
+  //   {
+  //     id: 7,
+  //   title: "Cuffs ✮ ⋆ ˚｡",
+  //   imageUrl:"https://pbs.twimg.com/media/G1TOKwYWEAAnoBZ?format=jpg&name=small",
+  //    link: "Cuffs"
+  // },
       {
       id: 7,
     title: "Rings  🌷⋆｡‧˚ ",
-    imageUrl:"https://pbs.twimg.com/media/G1TOPhWX0AAhISG?format=jpg&name=small",
+    imageUrl:"https://i.pinimg.com/1200x/39/05/af/3905af1724eb50ec0b1bb5710802dcaa.jpg",
      link: "Rings"
   },
   //     {
@@ -80,7 +80,7 @@ const categories = [
 function FeaturedCategories() {
   return (
 <div>
-  <h2 className="text-[#141414] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
+  <h2 className="text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
     Featured Categories
   </h2>
 

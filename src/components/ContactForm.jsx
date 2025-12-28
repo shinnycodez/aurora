@@ -32,9 +32,11 @@ const ContactForm = () => {
   };
 
   return (
-    <div className="max-w-full mx-auto mt-10 bg-[#
-#fefaf9] p-8 rounded-2xl shadow-lg border border-[#B6CEB4]">
-      <h2 className="text-2xl font-bold text-white mb-4 text-center"> Leave a comment</h2>
+    <div className="max-w-full mx-auto mt-10 bg-[#1E201E] p-8 rounded-2xl shadow-lg border border-white text-white">
+      <h2 className="text-2xl font-bold mb-4 text-center">
+        Leave a comment
+      </h2>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"
@@ -42,32 +44,40 @@ const ContactForm = () => {
           placeholder="Your name"
           value={form.name}
           onChange={handleChange}
-          className="w-full p-3 rounded-lg border border-[#B6CEB4] focus:outline-none focus:ring-2 focus:ring-pink-400"
+          className="w-full p-3 rounded-lg bg-transparent border border-white text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-white"
         />
+
         <input
           type="email"
           name="email"
           placeholder="Your email"
           value={form.email}
           onChange={handleChange}
-          className="w-full p-3 rounded-lg border border-[#B6CEB4] focus:outline-none focus:ring-2 focus:ring-pink-400"
+          className="w-full p-3 rounded-lg bg-transparent border border-white text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-white"
         />
+
         <textarea
           name="message"
           placeholder="Write your cute message..."
           rows="4"
           value={form.message}
           onChange={handleChange}
-          className="w-full p-3 rounded-lg border border-[#B6CEB4] focus:outline-none focus:ring-2 focus:ring-pink-400"
+          className="w-full p-3 rounded-lg bg-transparent border border-white text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-white"
         />
+
         <button
           type="submit"
-          className="w-full bg-[#B6CEB4] hover:bg-pink-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300"
+          className="w-full bg-white text-black font-semibold py-2 px-4 rounded-lg hover:opacity-90 transition duration-300"
         >
           ✨ Send
         </button>
       </form>
-      {status && <p className="mt-4 text-center text-pink-600">{status}</p>}
+
+      {status && (
+        <p className="mt-4 text-center text-white">
+          {status}
+        </p>
+      )}
     </div>
   );
 };
