@@ -4,6 +4,12 @@ import { Link } from 'react-router-dom';
 
 const Cart = ({ isOpen, onClose }) => {
   const [cartItems, setCartItems] = useState([]);
+  const [currency, setCurrency] = useState('PKR'); // PKR, EUR, USD
+  const [exchangeRates] = useState({
+    PKR: 1,
+    USD: 280,
+    EUR: 330
+  });
 
   // Load cart items from storage
   useEffect(() => {
@@ -44,6 +50,30 @@ const Cart = ({ isOpen, onClose }) => {
     sessionStorage.setItem('cartItems', data);
   };
 
+  // Convert price to selected currency
+  const convertPrice = (priceInPKR, targetCurrency = currency) => {
+    const rate = exchangeRates[targetCurrency];
+    if (targetCurrency === 'PKR') {
+      return priceInPKR;
+    }
+    return (priceInPKR / rate).toFixed(2);
+  };
+
+  // Format price with currency symbol
+  const formatPrice = (price, currencyType = currency) => {
+    const currencySymbols = {
+      PKR: 'PKR ',
+      USD: '$',
+      EUR: '€'
+    };
+    
+    const formattedPrice = convertPrice(price, currencyType);
+    return `${currencySymbols[currencyType]}${Number(formattedPrice).toLocaleString('en-US', {
+      minimumFractionDigits: currencyType === 'PKR' ? 0 : 2,
+      maximumFractionDigits: currencyType === 'PKR' ? 0 : 2
+    })}`;
+  };
+
   const removeItem = (index) => {
     const updated = cartItems.filter((_, i) => i !== index);
     setCartItems(updated);
@@ -58,7 +88,7 @@ const Cart = ({ isOpen, onClose }) => {
     saveCartToStorage(updated);
   };
 
-  const total = cartItems.reduce(
+  const totalPKR = cartItems.reduce(
     (acc, item) => acc + (item.price || 0) * (item.quantity || 1),
     0
   );
@@ -79,6 +109,28 @@ const Cart = ({ isOpen, onClose }) => {
           >
             &times;
           </button>
+        </div>
+
+        {/* Currency Selector */}
+        <div className="px-4 py-3 border-b border-gray-700">
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-300">Currency:</span>
+            <div className="flex gap-1">
+              {['PKR', 'USD', 'EUR'].map((curr) => (
+                <button
+                  key={curr}
+                  onClick={() => setCurrency(curr)}
+                  className={`px-3 py-1 text-xs rounded-full transition-colors ${
+                    currency === curr
+                      ? 'bg-white text-black font-medium'
+                      : 'bg-gray-700 text-white hover:bg-gray-600'
+                  }`}
+                >
+                  {curr}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Items */}
@@ -112,13 +164,22 @@ const Cart = ({ isOpen, onClose }) => {
                     {item.lining ? ' | Lining' : ''}
                   </p>
 
+                  {/* Discount Applied Badge */}
+                  {item.discountApplied && (
+                    <div className="mt-1">
+                      <span className="text-xs bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded">
+                        {item.discountApplied}% OFF
+                      </span>
+                    </div>
+                  )}
+
                   <div className="flex items-center gap-2 mt-2">
                     <button
                       onClick={() =>
                         updateQuantity(index, item.quantity - 1)
                       }
                       disabled={item.quantity <= 1}
-                      className="px-2 py-1 border border-gray-600 rounded disabled:opacity-50"
+                      className="px-2 py-1 border border-gray-600 rounded disabled:opacity-50 hover:bg-gray-700"
                     >
                       −
                     </button>
@@ -131,20 +192,27 @@ const Cart = ({ isOpen, onClose }) => {
                       onClick={() =>
                         updateQuantity(index, item.quantity + 1)
                       }
-                      className="px-2 py-1 border border-gray-600 rounded"
+                      className="px-2 py-1 border border-gray-600 rounded hover:bg-gray-700"
                     >
                       +
                     </button>
                   </div>
 
-                  <p className="text-sm mt-1">
-                    PKR {(item.price * item.quantity).toLocaleString()}
-                  </p>
+                  <div className="mt-1">
+                    <p className="text-sm">
+                      {formatPrice(item.price * item.quantity)}
+                    </p>
+                    {item.originalPrice && item.originalPrice !== item.price && (
+                      <p className="text-xs text-gray-400 line-through">
+                        {formatPrice(item.originalPrice * item.quantity)}
+                      </p>
+                    )}
+                  </div>
                 </div>
 
                 <button
                   onClick={() => removeItem(index)}
-                  className="text-red-400 hover:text-red-600 p-1"
+                  className="text-red-400 hover:text-red-600 p-1 transition-colors"
                 >
                   <FaTrashAlt />
                 </button>
@@ -155,11 +223,26 @@ const Cart = ({ isOpen, onClose }) => {
 
         {/* Footer */}
         <div className="p-4 border-t border-gray-700 bg-[#1E201E]">
-          <div className="flex justify-between items-center mb-3">
-            <span className="text-sm text-gray-300">Total:</span>
-            <span className="text-lg font-semibold">
-              PKR {total.toLocaleString()}
-            </span>
+          <div className="space-y-2 mb-3">
+            {/* Subtotal */}
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-300">Subtotal:</span>
+              <span className="text-base font-medium">
+                {formatPrice(totalPKR)}
+              </span>
+            </div>
+
+            {/* Other Currencies */}
+            <div className="space-y-1 pt-2 border-t border-gray-800">
+              <span className="text-xs text-gray-400 block mb-1">Also in:</span>
+              <div className="flex justify-between text-xs text-gray-300">
+                {['PKR', 'USD', 'EUR'].filter(curr => curr !== currency).map((curr) => (
+                  <div key={curr}>
+                    {curr}: {formatPrice(totalPKR, curr)}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           {cartItems.length > 0 ? (

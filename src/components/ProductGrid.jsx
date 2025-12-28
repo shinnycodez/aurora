@@ -7,7 +7,7 @@ function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
-function ProductGrid({ filters = {} }) {
+function ProductGrid({ filters = {}, currency = 'PKR', formatPrice }) {
   const queryParams = useQuery();
   const categoryFromURL = queryParams.get('category');
   const searchFromURL = queryParams.get('search')?.toLowerCase().trim();
@@ -91,16 +91,23 @@ function ProductGrid({ filters = {} }) {
       </div>
 
       {/* Page Title */}
-<div className="flex items-center gap-3">
-  <p className="text-white text-[32px] font-bold">{title}</p>
-  {/* <img
-    src="https://scontent.flhe3-1.fna.fbcdn.net/v/t1.15752-9/520249943_1246640230543113_7697647323329758006_n.png?_nc_cat=111&ccb=1-7&_nc_sid=0024fc&_nc_ohc=u4zfdXOAvU4Q7kNvwFgQO4Y&_nc_oc=AdkCBcsCu4mxcEKuOl_1zSvdugQR2ORe21nAFRnIAw_Oq8DlfBc5hW_xYG97-RFL4TA&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.flhe3-1.fna&oh=03_Q7cD2wGI7Dwg4sWjdP_TmjqU0SJCVWSGWBo96a5JvK2vNYrosw&oe=68AD7B9F"
-    alt="category icon"
-    className="w-15 h-25 object-contain"
-  /> */}
-</div>
-
-
+      <div className="flex items-center justify-between gap-3 px-4">
+        <div className="flex items-center gap-3">
+          <p className="text-white text-[32px] font-bold">{title}</p>
+          {/* <img
+            src="https://scontent.flhe3-1.fna.fbcdn.net/v/t1.15752-9/520249943_1246640230543113_7697647323329758006_n.png?_nc_cat=111&ccb=1-7&_nc_sid=0024fc&_nc_ohc=u4zfdXOAvU4Q7kNvwFgQO4Y&_nc_oc=AdkCBcsCu4mxcEKuOl_1zSvdugQR2ORe21nAFRnIAw_Oq8DlfBc5hW_xYG97-RFL4TA&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.flhe3-1.fna&oh=03_Q7cD2wGI7Dwg4sWjdP_TmjqU0SJCVWSGWBo96a5JvK2vNYrosw&oe=68AD7B9F"
+            alt="category icon"
+            className="w-15 h-25 object-contain"
+          /> */}
+        </div>
+        
+        {/* Currency Indicator */}
+        <div className="hidden md:block text-sm text-gray-300">
+          <span className="bg-gray-800 px-3 py-1 rounded-full">
+            Prices in {currency}
+          </span>
+        </div>
+      </div>
 
       {/* Product Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
@@ -109,7 +116,7 @@ function ProductGrid({ filters = {} }) {
             <Link to={`/product/${product.id}`} key={product.id} className="h-full">
               <div className="flex flex-col h-full gap-3 pb-3 group shadow-md rounded-lg overflow-hidden transition-transform duration-300 hover:shadow-lg bg-[#2E302E]">
                 {/* Product image - fixed height */}
-             <div className="w-full aspect-square overflow-hidden">
+                <div className="w-full aspect-square overflow-hidden">
                   <img
                     src={product.coverImage || product.imageUrl}
                     alt={product.title}
@@ -118,17 +125,24 @@ function ProductGrid({ filters = {} }) {
                 </div>
 
                 {/* Product info - fixed height with consistent spacing */}
-                <div className="px-3 pb-4 flex flex-col justify-between h-[130px]"> {/* Fixed height for info section */}
-                  <div className="min-h-[60px] overflow-hidden"> {/* Fixed height for text */}
-                    <p className="text-white text-base font-medium line-clamp-2"> {/* Limit to 2 lines */}
+                <div className="px-3 pb-4 flex flex-col justify-between h-[130px]">
+                  <div className="min-h-[60px] overflow-hidden">
+                    <p className="text-white text-base font-medium line-clamp-2">
                       {product.title}
                     </p>
                     <p className="text-white text-sm font-normal mt-1">
-                      PKR {product.price}
+                      {formatPrice ? formatPrice(product.price) : `PKR ${product.price}`}
                     </p>
+                    
+                    {/* Show original PKR price as reference for non-PKR currencies */}
+                    {currency !== 'PKR' && (
+                      <p className="text-gray-400 text-xs mt-1">
+                        PKR {product.price.toLocaleString()}
+                      </p>
+                    )}
                   </div>
                   <button className="mt-auto py-2 px-1 rounded-full bg-[#393E46] text-white text-sm font-semibold shadow-md hover:bg-gray-900 transition-all duration-200">
-                    Buy Now
+                    Buy now
                   </button>
                 </div>
               </div>

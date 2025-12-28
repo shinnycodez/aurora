@@ -24,6 +24,12 @@ const ProductPage = ({ onOpenCart }) => {
   const [selectedSize, setSelectedSize] = useState(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [currency, setCurrency] = useState('PKR'); // PKR, EUR, USD
+  const [exchangeRates] = useState({
+    PKR: 1,
+    USD: 280,
+    EUR: 330
+  });
 
   // Fetch discounts from Firestore
   useEffect(() => {
@@ -83,13 +89,37 @@ const ProductPage = ({ onOpenCart }) => {
     fetchProduct();
   }, [id, navigate]);
 
-  // Calculate discounted price
+  // Calculate discounted price in PKR
   const getDiscountedPrice = () => {
     if (!activeDiscount) return product.price;
     return Math.round(product.price * (1 - activeDiscount.discountPercentage / 100));
   };
 
-  // Get the price to use for cart operations
+  // Convert price to selected currency
+  const convertPrice = (priceInPKR, targetCurrency = currency) => {
+    const rate = exchangeRates[targetCurrency];
+    if (targetCurrency === 'PKR') {
+      return priceInPKR;
+    }
+    return (priceInPKR / rate).toFixed(2);
+  };
+
+  // Format price with currency symbol
+  const formatPrice = (price, currencyType = currency) => {
+    const currencySymbols = {
+      PKR: 'PKR ',
+      USD: '$',
+      EUR: '€'
+    };
+    
+    const formattedPrice = convertPrice(price, currencyType);
+    return `${currencySymbols[currencyType]}${Number(formattedPrice).toLocaleString('en-US', {
+      minimumFractionDigits: currencyType === 'PKR' ? 0 : 2,
+      maximumFractionDigits: currencyType === 'PKR' ? 0 : 2
+    })}`;
+  };
+
+  // Get the price to use for cart operations (always in PKR)
   const getCurrentPrice = () => {
     return activeDiscount ? getDiscountedPrice() : product.price;
   };
@@ -129,8 +159,8 @@ const ProductPage = ({ onOpenCart }) => {
       id: itemId,
       productId: product.id,
       title: product.title,
-      price: getCurrentPrice(), // Use discounted price if available
-      originalPrice: product.price, // Store original price for reference
+      price: getCurrentPrice(), // Store price in PKR
+      originalPrice: product.price, // Store original price in PKR
       image: product.coverImage,
       quantity,
       variation: selectedVariation, // Include the selected color variation
@@ -183,8 +213,8 @@ const ProductPage = ({ onOpenCart }) => {
       id: product.id,
       productId: product.id,
       title: product.title,
-      price: getCurrentPrice(), // Use discounted price if available
-      originalPrice: product.price, // Store original price for reference
+      price: getCurrentPrice(), // Store price in PKR
+      originalPrice: product.price, // Store original price in PKR
       image: product.coverImage,
       quantity,
       variation: selectedVariation, // Include the selected color variation
@@ -216,8 +246,8 @@ const ProductPage = ({ onOpenCart }) => {
     ? [product.coverImage, ...product.images]
     : [product.coverImage];
 
-  const discountedPrice = getDiscountedPrice();
-  const savings = product.price - discountedPrice;
+  const discountedPricePKR = getDiscountedPrice();
+  const savingsPKR = product.price - discountedPricePKR;
 
   return (
     <div className="relative flex min-h-screen flex-col bg-[#1E201E] overflow-x-hidden">
@@ -261,6 +291,28 @@ const ProductPage = ({ onOpenCart }) => {
           </div>
 
           <div className="flex flex-col w-full md:w-[360px]">
+            {/* Currency Selector - Subtle */}
+            <div className="px-4 py-3">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-sm text-white">Show price in:</span>
+                <div className="flex gap-1">
+                  {['PKR', 'USD', 'EUR'].map((curr) => (
+                    <button
+                      key={curr}
+                      onClick={() => setCurrency(curr)}
+                      className={`px-3 py-1 text-sm rounded-full transition-colors ${
+                        currency === curr
+                          ? 'bg-white text-black font-medium'
+                          : 'bg-gray-700 text-white hover:bg-gray-600'
+                      }`}
+                    >
+                      {curr}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
             {/* Product Info with Discount Pricing */}
             <div className="px-4 py-3">
               <h1 className="text-2xl font-bold text-white mb-2">{product.title}</h1>
@@ -271,10 +323,10 @@ const ProductPage = ({ onOpenCart }) => {
                   <div className="space-y-1">
                     <div className="flex items-center gap-3">
                       <span className="text-2xl font-bold text-green-600">
-                        PKR {discountedPrice.toLocaleString()}
+                        {formatPrice(discountedPricePKR)}
                       </span>
                       <span className="text-lg text-white line-through">
-                        PKR {product.price.toLocaleString()}
+                        {formatPrice(product.price)}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -282,7 +334,7 @@ const ProductPage = ({ onOpenCart }) => {
                         {activeDiscount.discountPercentage}% OFF
                       </span>
                       <span className="text-green-600 text-sm font-medium">
-                        You save PKR {savings.toLocaleString()}
+                        You save {formatPrice(savingsPKR)}
                       </span>
                     </div>
                     {activeDiscount.description && (
@@ -293,9 +345,20 @@ const ProductPage = ({ onOpenCart }) => {
                   </div>
                 ) : (
                   <span className="text-2xl font-bold text-white">
-                    PKR {product.price.toLocaleString()}
+                    {formatPrice(product.price)}
                   </span>
                 )}
+                
+                {/* Show other currency prices - smaller */}
+                <div className="mt-2">
+                  <div className="flex gap-3 text-sm">
+                    {['PKR', 'USD', 'EUR'].filter(curr => curr !== currency).map((curr) => (
+                      <div key={curr} className="text-gray-300">
+                        {curr}: {formatPrice(activeDiscount ? discountedPricePKR : product.price, curr)}
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               <p className="text-white mb-4">{product.description}</p>
@@ -390,7 +453,7 @@ const ProductPage = ({ onOpenCart }) => {
                     Adding...
                   </span>
                 ) : activeDiscount ? (
-                  `Add to Cart - PKR ${getCurrentPrice().toLocaleString()}`
+                  `Add to Cart - ${formatPrice(getCurrentPrice())}`
                 ) : (
                   'Add to Cart'
                 )}
@@ -405,14 +468,14 @@ const ProductPage = ({ onOpenCart }) => {
                     : 'bg-gray-400 text-white cursor-not-allowed'
                 }`}
               >
-                {activeDiscount ? `Buy Now - PKR ${getCurrentPrice().toLocaleString()}` : 'Buy Now'}
+                {activeDiscount ? `Buy Now - ${formatPrice(getCurrentPrice())}` : 'Buy Now'}
               </button>
 
               {/* Savings highlight */}
               {activeDiscount && (
                 <div className="text-center p-2 bg-green-100 rounded-lg">
                   <p className="text-green-700 font-medium text-sm">
-                    💰 You're saving PKR {(savings * quantity).toLocaleString()} on this purchase!
+                    💰 You're saving {formatPrice(savingsPKR * quantity)} on this purchase!
                   </p>
                 </div>
               )}
@@ -421,8 +484,8 @@ const ProductPage = ({ onOpenCart }) => {
             {/* Additional Product Details */}
             {product.details && (
               <div className="px-4 py-2 border-t mt-4">
-                <h3 className="font-medium text-gray-900 mb-2">Product Details</h3>
-                <div className="text-sm text-gray-600 space-y-1">
+                <h3 className="font-medium text-white mb-2">Product Details</h3>
+                <div className="text-sm text-white space-y-1">
                   {Object.entries(product.details).map(([key, value]) => (
                     <div key={key} className="flex justify-between">
                       <span className="capitalize">{key}:</span>
