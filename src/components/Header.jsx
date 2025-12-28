@@ -32,7 +32,7 @@ const Header = () => {
     }
   };
 
-  const adminEmails = ["mueezimran1@gmail.com", "jaweriaghaffar41@gmail.com"];
+  const adminEmails = ["mueezimran1@gmail.com", "khan.faizaimran@gmail.com"];
 
   return (
     <>
@@ -140,14 +140,40 @@ Rings ✮ ⋆ ˚｡
                   🔍
                 </button>
               </div>
-
-              <Link to="/products?category=Bracelets" onClick={() => setIsMenuOpen(false)} className="block px-4 py-3 hover:bg-[#FFE9DD] rounded-lg transition">Bracelets ˚⊹♡</Link>
-              <Link to="/products?category=Rings" onClick={() => setIsMenuOpen(false)} className="blocsk px-4 py-3 hover:bg-[#FFE9DD] rounded-lg transition">Rings ✮ ⋆ ˚｡
+<Link 
+  to="/products?category=Bracelets" 
+  onClick={() => setIsMenuOpen(false)} 
+  className="block px-4 py-3 hover:bg-[#FFE9DD] rounded-lg transition-all duration-200"
+>
+  Bracelets ˚⊹♡
 </Link>
-              <Link to="/products?category=Earrings" onClick={() => setIsMenuOpen(false)} className="block px-4 py-3 hover:bg-[#FFE9DD] rounded-lg transition">
-Earrings˚⋆𐙚｡
+<Link 
+  to="/products?category=Rings" 
+  onClick={() => setIsMenuOpen(false)} 
+  className="block px-4 py-3 hover:bg-[#FFE9DD] rounded-lg transition-all duration-200"
+>
+  Rings ✮ ⋆ ˚｡
 </Link>
-              <Link to="/products?category=Necklaces ✧˖°." onClick={() => setIsMenuOpen(false)} className="block px-4 py-3 hover:bg-[#FFE9DD] rounded-lg transition">Necklaces ｡°✩
+<Link 
+  to="/products?category=Earrings" 
+  onClick={() => setIsMenuOpen(false)} 
+  className="block px-4 py-3 hover:bg-[#FFE9DD] rounded-lg transition-all duration-200"
+>
+  Earrings ˚⋆𐙚｡
+</Link>
+<Link 
+  to="/products?category=Necklaces" 
+  onClick={() => setIsMenuOpen(false)} 
+  className="block px-4 py-3 hover:bg-[#FFE9DD] rounded-lg transition-all duration-200"
+>
+  Necklaces ｡°✩
+</Link>
+<Link 
+  to="/about-us" 
+  onClick={() => setIsMenuOpen(false)} 
+  className="block px-4 py-3 hover:bg-[#FFE9DD] rounded-lg transition-all duration-200 mt-1"
+>
+  About us ｡°✩
 </Link>
 
               {adminEmails.includes(user?.email) && (

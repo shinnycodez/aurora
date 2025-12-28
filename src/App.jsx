@@ -10,13 +10,14 @@ import ProductPage from "./components/Productpage";
 import CheckoutPage from "./components/ChceckoutPage";
 import BuyNowCheckout from "./components/BuyNowCheckout";
 import OrderThankYou from "./components/OrderThankYou";
+import AboutUs from "./components/Aboutus";
 
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const adminEmails = ["mueezimran1@gmail.com", "jaweriaghaffar41@gmail.com"];
+  const adminEmails = ["mueezimran1@gmail.com", "khan.faizaimran@gmail.com"];
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(
@@ -60,7 +61,7 @@ function App() {
         <Route path="/buynowcheckout" element={<BuyNowCheckout />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/thanks" element={<OrderThankYou />} />
-
+ <Route path="/about-us" element={<AboutUs />} />
         {/* Protected Admin Route */}
         <Route
           path="/admin"
