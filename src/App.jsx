@@ -10,7 +10,7 @@ import ProductPage from "./components/Productpage";
 import CheckoutPage from "./components/ChceckoutPage";
 import BuyNowCheckout from "./components/BuyNowCheckout";
 import OrderThankYou from "./components/OrderThankYou";
-import AboutUs from "./components/Aboutus";
+import AboutUs from "./components/AboutUs";
 
 function App() {
   const [user, setUser] = useState(null);
