@@ -1,36 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 
 function HeroBanner() {
   // Array of images for the carousel
   const images = [
     'https://pbs.twimg.com/media/G9RQ1WoaYAAyF02?format=jpg&name=900x900',
-    // Add more image URLs here
     'https://pbs.twimg.com/media/G9WU9FSbkAABVzr?format=jpg&name=900x900',
     'https://pbs.twimg.com/media/G9WW8k5bYAA_RCo?format=jpg&name=900x900',
-    // 'https://example.com/image3.jpg',
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // Auto-slide every 5 seconds
-  useEffect(() => {
-    if (images.length <= 1) return;
-    
-    const interval = setInterval(() => {
-      nextSlide();
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [currentIndex]);
-
-  const nextSlide = () => {
+  // Memoize nextSlide to avoid dependency issues
+  const nextSlide = useCallback(() => {
     if (isTransitioning || images.length <= 1) return;
     setIsTransitioning(true);
     setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
     setTimeout(() => setIsTransitioning(false), 500);
-  };
+  }, [isTransitioning, images.length]);
 
   const prevSlide = () => {
     if (isTransitioning || images.length <= 1) return;
@@ -45,6 +33,17 @@ function HeroBanner() {
     setCurrentIndex(index);
     setTimeout(() => setIsTransitioning(false), 500);
   };
+
+  // Auto-slide every 5 seconds - FIXED: removed currentIndex from dependencies
+  useEffect(() => {
+    if (images.length <= 1) return;
+    
+    const interval = setInterval(() => {
+      nextSlide();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [nextSlide, images.length]); // Only depend on nextSlide and images.length
 
   return (
     <div className="relative">
