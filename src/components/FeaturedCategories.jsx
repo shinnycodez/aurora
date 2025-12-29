@@ -39,24 +39,32 @@ const categories = [
     imageUrl:"https://i.pinimg.com/736x/ce/d6/15/ced615a04ecd507ca7b084d3738e249b.jpg",
      link: "Pendants"
   },
+      {
+      id: 6,
+    title: "Skin care ⋆˚࿔",
+    imageUrl:"https://i.pinimg.com/736x/13/bd/28/13bd2874106773126d93a5d72ac8f662.jpg",
+     link: "Skin care"
+  },
+        {
+      id: 7,
+    title: "Rings  🌷⋆｡‧˚ ",
+    imageUrl:"https://i.pinimg.com/1200x/39/05/af/3905af1724eb50ec0b1bb5710802dcaa.jpg",
+     link: "Rings"
+  },
   {
       id: 6,
-    title: "tasbeeh ⋆˚࿔",
-    imageUrl:"https://i.pinimg.com/736x/2c/b7/a2/2cb7a2eafdd6804914c55e27802c2f2f.jpg",
-     link: "tasbeeh"
+    title: "Others ⋆˚࿔",
+    imageUrl:"https://i.pinimg.com/736x/43/dd/49/43dd49c7cbd6343da220ebef36ace2c4.jpg",
+     link: "Others"
   },
+
   //   {
   //     id: 7,
   //   title: "Cuffs ✮ ⋆ ˚｡",
   //   imageUrl:"https://pbs.twimg.com/media/G1TOKwYWEAAnoBZ?format=jpg&name=small",
   //    link: "Cuffs"
   // },
-      {
-      id: 7,
-    title: "Rings  🌷⋆｡‧˚ ",
-    imageUrl:"https://i.pinimg.com/1200x/39/05/af/3905af1724eb50ec0b1bb5710802dcaa.jpg",
-     link: "Rings"
-  },
+
   //     {
   //     id: 7,
   //   title: "3 piece sets⭒˚.⋆",

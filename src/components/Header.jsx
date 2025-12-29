@@ -44,12 +44,14 @@ const Header = () => {
 
           <div className="hidden md:flex items-center gap-5 lg:gap-9">
             <Link to="/" className="text-white text-sm font-medium transition">Home</Link>
-            <Link to="/products?category=Bracelets" className="text-white text-sm font-medium transition">Bracelets ⋆౨ৎ˚⟡</Link>
+            <Link to="/products?category=Bracelets" className="text-white text-sm font-medium transition">Bracelets</Link>
             <Link to="/products?category=Rings" className="text-white text-sm font-medium  transition">
-Rings ✮ ⋆ ˚｡
+Rings
 </Link>
-            <Link to="/products?category=Earrings" className="text-white text-sm font-medium  transition">Earrings ⋆˚꩜｡</Link>
-            <Link to="/products?category=Necklaces" className="text-white text-sm font-medium  transition">Necklaces ✧˖°.｡</Link>
+            <Link to="/products?category=Earrings" className="text-white text-sm font-medium  transition">Earrings</Link>
+            <Link to="/products?category=Necklaces" className="text-white text-sm font-medium  transition">Necklaces</Link>
+        <Link to="/contact" className="text-white text-sm font-medium  transition">Contact us</Link>
+         <Link to="/about-us" className="text-white text-sm font-medium  transition">About us</Link>
             {adminEmails.includes(user?.email) && (
               <Link to="/admin" className="text-white text-sm font-medium hover:text-[#0c77f2] transition">Admin</Link>
             )}
@@ -167,6 +169,27 @@ Rings ✮ ⋆ ˚｡
   className="block px-4 py-3 hover:bg-[#FFE9DD] rounded-lg transition-all duration-200"
 >
   Necklaces ｡°✩
+</Link>
+<Link 
+  to="/products?category=Skin care" 
+  onClick={() => setIsMenuOpen(false)} 
+  className="block px-4 py-3 hover:bg-[#FFE9DD] rounded-lg transition-all duration-200"
+>
+  Skin care
+</Link>
+<Link 
+  to="/products?category=Others" 
+  onClick={() => setIsMenuOpen(false)} 
+  className="block px-4 py-3 hover:bg-[#FFE9DD] rounded-lg transition-all duration-200"
+>
+  Others
+</Link>
+<Link 
+  to="/Contact" 
+  onClick={() => setIsMenuOpen(false)} 
+  className="block px-4 py-3 hover:bg-[#FFE9DD] rounded-lg transition-all duration-200"
+>
+  Contact ｡°✩
 </Link>
 <Link 
   to="/about-us" 
