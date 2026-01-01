@@ -5,7 +5,7 @@ function HeroBanner() {
   // Array of images for the carousel
   const images = [
     'https://pbs.twimg.com/media/G9RQ1WoaYAAyF02?format=jpg&name=900x900',
-    'https://pbs.twimg.com/media/G9ai3ylbsAAmGH7?format=jpg&name=4096x4096',
+    'https://pbs.twimg.com/media/G9ktJ7IaMAMX27C?format=jpg&name=900x900',
     'https://pbs.twimg.com/media/G9ai3ygbYAAYaYm?format=jpg&name=4096x4096',
     'https://pbs.twimg.com/media/G9aj44taYAMYXDA?format=jpg&name=900x900',
      'https://pbs.twimg.com/media/G9ai34iaYAEobQQ?format=jpg&name=4096x4096',
