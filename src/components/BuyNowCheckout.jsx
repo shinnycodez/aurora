@@ -16,9 +16,9 @@ const BuyNowCheckout = () => {
     city: '',
     postalCode: '',
     region: '',
-    country: '',
-    shippingMethod: 'Standard Delivery',
-    paymentMethod: 'EasyPaisa',
+    country: 'PK',
+    shippingMethod: 'karachi',
+    paymentMethod: 'Bank Transfer',
     promoCode: '',
     notes: '',
   });
@@ -26,6 +26,50 @@ const BuyNowCheckout = () => {
   const [errors, setErrors] = useState({});
   const [bankTransferProofBase64, setBankTransferProofBase64] = useState(null);
   const [convertingImage, setConvertingImage] = useState(false);
+
+  // Currency exchange rates
+  const exchangeRates = {
+    USD: 280,  // 1 USD = 280 PKR
+    EUR: 330,  // 1 EUR = 330 PKR
+    PKR: 1
+  };
+
+  // Shipping rates based on location
+  const shippingRates = {
+    karachi: 250,      // Karachi
+    pakistan: 350,     // Other Pakistan cities
+    international: 9000 // Worldwide
+  };
+
+  // Delivery time estimates - 10-12 working days for everything
+  const deliveryTimes = {
+    karachi: "10-12 working days",
+    pakistan: "10-12 working days",
+    international: "10-12 working days"
+  };
+
+  // List of countries
+  const countries = [
+    { code: 'PK', name: 'Pakistan' },
+    { code: 'US', name: 'United States' },
+    { code: 'GB', name: 'United Kingdom' },
+    { code: 'CA', name: 'Canada' },
+    { code: 'AU', name: 'Australia' },
+    { code: 'AE', name: 'United Arab Emirates' },
+    { code: 'SA', name: 'Saudi Arabia' },
+    { code: 'IN', name: 'India' },
+    { code: 'CN', name: 'China' },
+    { code: 'DE', name: 'Germany' },
+    { code: 'FR', name: 'France' },
+    { code: 'IT', name: 'Italy' },
+    { code: 'ES', name: 'Spain' },
+    { code: 'JP', name: 'Japan' },
+    { code: 'KR', name: 'South Korea' },
+    { code: 'SG', name: 'Singapore' },
+    { code: 'MY', name: 'Malaysia' },
+    { code: 'TR', name: 'Turkey' },
+    // Add more countries as needed
+  ];
 
   // Load buy now product from session storage
   useEffect(() => {
@@ -46,10 +90,53 @@ const BuyNowCheckout = () => {
     }
   }, []);
 
-  const subtotal = cartItems.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0);
-const shippingCost = 300;
+  // Calculate shipping cost based on location and shipping method
+  const calculateShippingCost = () => {
+    if (form.country !== 'PK') {
+      return shippingRates.international;
+    }
+    
+    if (form.shippingMethod === 'karachi') {
+      return shippingRates.karachi;
+    }
+    
+    return shippingRates.pakistan;
+  };
 
+  // Calculate delivery time
+  const calculateDeliveryTime = () => {
+    if (form.country !== 'PK') {
+      return deliveryTimes.international;
+    }
+    
+    if (form.shippingMethod === 'karachi') {
+      return deliveryTimes.karachi;
+    }
+    
+    return deliveryTimes.pakistan;
+  };
+
+  const subtotal = cartItems.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0);
+  const shippingCost = calculateShippingCost();
   const total = subtotal + shippingCost;
+  const deliveryTime = calculateDeliveryTime();
+
+  // Currency conversion functions
+  const convertToCurrency = (amountInPKR, currency) => {
+    const rate = exchangeRates[currency];
+    const converted = amountInPKR / rate;
+    
+    // Format based on currency
+    if (currency === 'PKR') {
+      return `PKR ${amountInPKR.toLocaleString()}`;
+    } else if (currency === 'USD') {
+      return `$${converted.toFixed(2)}`;
+    } else if (currency === 'EUR') {
+      return `€${converted.toFixed(2)}`;
+    }
+    
+    return `${currency} ${converted.toFixed(2)}`;
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -58,13 +145,29 @@ const shippingCost = 300;
       [name]: type === 'checkbox' ? checked : value
     }));
     
+    // If country changes and it's not Pakistan, set shipping method to international
+    if (name === 'country') {
+      if (value !== 'PK') {
+        setForm(prev => ({
+          ...prev,
+          shippingMethod: 'international'
+        }));
+      } else {
+        // If changing back to Pakistan, set default shipping method
+        setForm(prev => ({
+          ...prev,
+          shippingMethod: 'karachi'
+        }));
+      }
+    }
+    
     // Clear error for the field being changed
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
     
-    // Clear the Base64 string if payment method changes from EasyPaisa
-    if (name === 'paymentMethod' && value !== 'EasyPaisa') {
+    // Clear the Base64 string if payment method changes from Bank Transfer
+    if (name === 'paymentMethod' && value !== 'Bank Transfer') {
       setBankTransferProofBase64(null);
       setErrors(prev => ({ ...prev, bankTransferProof: '' }));
     }
@@ -104,7 +207,7 @@ const shippingCost = 300;
 
   const validateForm = () => {
     const newErrors = {};
-    const requiredFields = [ 'fullName', 'phone', 'address', 'city', 'region', 'country'];
+    const requiredFields = [ 'fullName', 'phone', 'address', 'city', 'country'];
     
     requiredFields.forEach(field => {
       if (!form[field]) {
@@ -122,7 +225,7 @@ const shippingCost = 300;
       newErrors.phone = 'Please enter a valid phone number (at least 7 digits)';
     }
 
-    if (form.paymentMethod === 'EasyPaisa' && !bankTransferProofBase64) {
+    if (form.paymentMethod === 'Bank Transfer' && !bankTransferProofBase64) {
       newErrors.bankTransferProof = 'Please upload a screenshot of your JazzCash transfer or bank transfer receipt.';
     }
 
@@ -159,7 +262,6 @@ const shippingCost = 300;
         quantity: item.quantity || 1,
         price: item.price,
         image: item.image || item.coverImage,
-        // Store variation details
         variation: item.variation || null,
         type: item.type || null,
         size: item.size || null,
@@ -181,10 +283,11 @@ const shippingCost = 300;
       subtotal,
       shippingCost,
       total,
+      deliveryTime,
       createdAt: new Date(),
       status: 'processing',
       buyNow: true,
-      bankTransferProofBase64: form.paymentMethod === 'EasyPaisa' ? bankTransferProofBase64 : null,
+      bankTransferProofBase64: form.paymentMethod === 'Bank Transfer' ? bankTransferProofBase64 : null,
     };
 
     try {
@@ -342,7 +445,7 @@ const shippingCost = 300;
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="region" className="block text-sm font-medium text-gray-700 mb-1">Province/Region*</label>
+                    <label htmlFor="region" className="block text-sm font-medium text-gray-700 mb-1">Province/Region</label>
                     <input 
                       id="region"
                       name="region" 
@@ -363,7 +466,11 @@ const shippingCost = 300;
                       className={`w-full px-4 py-2 border ${errors.country ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-black focus:border-black text-sm sm:text-base`}
                     >
                       <option value="">Select Country</option>
-                      <option value="PK">Pakistan</option>
+                      {countries.map(country => (
+                        <option key={country.code} value={country.code}>
+                          {country.name}
+                        </option>
+                      ))}
                     </select>
                     {errors.country && <p className="mt-1 text-sm text-red-600">{errors.country}</p>}
                   </div>
@@ -373,17 +480,53 @@ const shippingCost = 300;
               <h2 className="text-lg sm:text-xl font-semibold mt-8 mb-6 pb-2 border-b">Shipping Method</h2>
               
               <div className="space-y-4">
+                {form.country === 'PK' && (
+                  <>
+                    <label className="flex items-center p-4 border rounded-md hover:border-black cursor-pointer">
+                      <input
+                        type="radio"
+                        name="shippingMethod"
+                        value="karachi"
+                        checked={form.shippingMethod === 'karachi'}
+                        onChange={handleChange}
+                        disabled={form.country !== 'PK'}
+                        className="h-4 w-4 text-black focus:ring-black border-gray-300"
+                      />
+                      <div className="ml-3">
+                        <p className="font-medium text-gray-900 text-sm sm:text-base">Karachi Delivery</p>
+                        <p className="text-sm text-gray-600">PKR {shippingRates.karachi.toLocaleString()} • {deliveryTimes.karachi}</p>
+                      </div>
+                    </label>
+                    <label className="flex items-center p-4 border rounded-md hover:border-black cursor-pointer">
+                      <input
+                        type="radio"
+                        name="shippingMethod"
+                        value="pakistan"
+                        checked={form.shippingMethod === 'pakistan'}
+                        onChange={handleChange}
+                        disabled={form.country !== 'PK'}
+                        className="h-4 w-4 text-black focus:ring-black border-gray-300"
+                      />
+                      <div className="ml-3">
+                        <p className="font-medium text-gray-900 text-sm sm:text-base">All Pakistan (except Karachi)</p>
+                        <p className="text-sm text-gray-600">PKR {shippingRates.pakistan.toLocaleString()} • {deliveryTimes.pakistan}</p>
+                      </div>
+                    </label>
+                  </>
+                )}
+                
                 <label className="flex items-center p-4 border rounded-md hover:border-black cursor-pointer">
                   <input
                     type="radio"
                     name="shippingMethod"
-                    value="Standard Delivery"
-                    checked={form.shippingMethod === 'Standard Delivery'}
+                    value="international"
+                    checked={form.shippingMethod === 'international'}
                     onChange={handleChange}
                     className="h-4 w-4 text-black focus:ring-black border-gray-300"
                   />
                   <div className="ml-3">
-                    <p className="font-medium text-gray-900 text-sm sm:text-base">Standard Delivery</p>
+                    <p className="font-medium text-gray-900 text-sm sm:text-base">International Shipping</p>
+                    <p className="text-sm text-gray-600">PKR {shippingRates.international.toLocaleString()} • {deliveryTimes.international}</p>
                   </div>
                 </label>
               </div>
@@ -391,7 +534,7 @@ const shippingCost = 300;
               <h2 className="text-lg sm:text-xl font-semibold mt-8 mb-6 pb-2 border-b">Payment Method</h2>
               
               <div className="space-y-4">
-                {['EasyPaisa'].map(method => (
+                {['Bank Transfer'].map(method => (
                   <label key={method} className="flex items-center p-4 border rounded-md hover:border-black cursor-pointer">
                     <input
                       type="radio"
@@ -406,15 +549,17 @@ const shippingCost = 300;
                 ))}
               </div>
 
-              {form.paymentMethod === 'EasyPaisa' && (
+              {form.paymentMethod === 'Bank Transfer' && (
                 <div className="mt-6 p-4 border border-blue-300 bg-blue-50 rounded-md">
-                  <h3 className="text-base sm:text-lg font-semibold mb-3">EasyPaisa Details</h3>
+                  <h3 className="text-base sm:text-lg font-semibold mb-3">Bank Transfer Details</h3>
                   <p className="text-gray-700 mb-4 text-sm sm:text-base">
-                    Please transfer the total amount of PKR {total.toLocaleString()} to our account:
+                    Please transfer the total amount of {convertToCurrency(total, 'PKR')} ({convertToCurrency(total, 'USD')} / {convertToCurrency(total, 'EUR')}) to our account:
                   </p>
-  <ul className="list-disc list-inside text-gray-800 text-sm sm:text-base mb-4">
-             <li><strong>Account Name:</strong> Aasma Ghaffar </li>
-              <li><strong>EasyPaisa Number:</strong> 03215122007 </li>
+                  <ul className="list-disc list-inside text-gray-800 text-sm sm:text-base mb-4">
+                      <li><strong>Bank Name:</strong> Meezan Bank-Baradari North Karachi Branch</li>
+                     <li><strong>Account Name:</strong> FAIZA IMRAN ASAAN AC </li>
+                    <li><strong>Account number</strong> 99390105064076 </li>
+                    <li><strong>IBAN</strong> PK04MEZN0099390105064076 </li>
                   </ul>
                   
                   <p className="text-gray-700 mb-4 text-sm sm:text-base">
@@ -521,9 +666,14 @@ const shippingCost = 300;
                         <p className="text-xs sm:text-sm text-gray-500">Qty: {item.quantity || 1}</p>
                       </div>
                     </div>
-                    <p className="font-medium text-sm sm:text-base">
-                      PKR {(item.price * (item.quantity || 1)).toLocaleString()}
-                    </p>
+                    <div className="text-right">
+                      <p className="font-medium text-sm sm:text-base">
+                        {convertToCurrency(item.price * (item.quantity || 1), 'PKR')}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {convertToCurrency(item.price * (item.quantity || 1), 'USD')} / {convertToCurrency(item.price * (item.quantity || 1), 'EUR')}
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -531,25 +681,49 @@ const shippingCost = 300;
               <div className="space-y-3 border-t border-gray-200 pt-4">
                 <div className="flex justify-between">
                   <span className="text-sm text-gray-600">Subtotal</span>
-                  <span className="text-sm">PKR {subtotal.toLocaleString()}</span>
+                  <div className="text-right">
+                    <p className="text-sm">{convertToCurrency(subtotal, 'PKR')}</p>
+                    <p className="text-xs text-gray-500">
+                      {convertToCurrency(subtotal, 'USD')} / {convertToCurrency(subtotal, 'EUR')}
+                    </p>
+                  </div>
                 </div>
                 
                 <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Shipping</span>
-                  <span className="text-sm">PKR {shippingCost.toLocaleString()}</span>
+                  <div>
+                    <span className="text-sm text-gray-600">Shipping</span>
+                    <p className="text-xs text-gray-500">({deliveryTime})</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm">{convertToCurrency(shippingCost, 'PKR')}</p>
+                    <p className="text-xs text-gray-500">
+                      {convertToCurrency(shippingCost, 'USD')} / {convertToCurrency(shippingCost, 'EUR')}
+                    </p>
+                  </div>
                 </div>
                 
                 {form.promoCode && (
                   <div className="flex justify-between">
                     <span className="text-sm text-gray-600">Discount</span>
-                    <span className="text-sm text-green-600">-PKR 0</span>
+                    <div className="text-right">
+                      <span className="text-sm text-green-600">-PKR 0</span>
+                      <p className="text-xs text-green-500">-$0.00 / -€0.00</p>
+                    </div>
                   </div>
                 )}
               </div>
 
               <div className="flex justify-between mt-4 pt-4 border-t border-gray-200">
-                <span className="font-medium text-base sm:text-lg">Total</span>
-                <span className="font-bold text-base sm:text-lg">PKR {total.toLocaleString()}</span>
+                <div>
+                  <span className="font-medium text-base sm:text-lg">Total</span>
+                  <p className="text-xs text-gray-500">Delivery: {deliveryTime}</p>
+                </div>
+                <div className="text-right">
+                  <span className="font-bold text-base sm:text-lg">{convertToCurrency(total, 'PKR')}</span>
+                  <p className="text-sm text-gray-600">
+                    {convertToCurrency(total, 'USD')} / {convertToCurrency(total, 'EUR')}
+                  </p>
+                </div>
               </div>
 
               <button
@@ -568,12 +742,20 @@ const shippingCost = 300;
                 ) : cartItems.length === 0 ? (
                   'No Items to Order'
                 ) : (
-                  'Place Order Now'
+                  `Place Order - ${convertToCurrency(total, 'PKR')}`
                 )}
               </button>
 
               <div className="mt-6 text-center text-xs sm:text-sm text-gray-500">
                 <p>100% secure checkout</p>
+                <p className="mt-2">Estimated delivery time: {deliveryTime}</p>
+              </div>
+              
+              {/* Currency Conversion Info */}
+              <div className="mt-4 p-3 bg-gray-50 rounded border border-gray-200">
+                <p className="text-xs text-gray-600 text-center">
+                  Currency rates: 1 USD = 280 PKR | 1 EUR = 330 PKR
+                </p>
               </div>
             </div>
           </div>
